@@ -2,6 +2,18 @@
 
 Realtime Server monitor
 
+Install:
+
+```
+npm install [--production]
+```
+
+Run with:
+
+```
+node app.js
+```
+
 To build frontend:
 
 ```
@@ -13,5 +25,3 @@ Or, to rebuild on file changes:
 ```
 grunt watch
 ```
-
-
