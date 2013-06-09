@@ -30,15 +30,8 @@
 
   Chart = (function() {
     function Chart(container) {
-      var dots, height, width, yScale,
-        _this = this;
-      sock.on('ping', function(msg) {
-        _this.data.push(msg.totalCpu);
-        _this.data.shift();
-        console.log(msg);
-        return _this.update();
-      });
-      this.data = generateRandomData();
+      var dots, height, width, yScale;
+      this.data = [];
       width = 400;
       height = 60;
       yScale = d3.scale.linear().domain([0, 200]).range([height, 0]);
@@ -51,7 +44,6 @@
       }).y(function(d) {
         return yScale(d);
       });
-      this.update();
       dots = this.svg.selectAll("path").data([this.data]).enter().append("path").attr({
         d: this.line,
         stroke: 'black',
@@ -61,7 +53,13 @@
       });
     }
 
-    Chart.prototype.update = function() {
+    Chart.prototype.addPoint = function(val) {
+      this.data = this.data.slice(-200);
+      this.data.push(val);
+      return this.updateGraph();
+    };
+
+    Chart.prototype.updateGraph = function() {
       return this.svg.selectAll("path").data([this.data]).attr({
         d: this.line
       });
@@ -72,7 +70,17 @@
   })();
 
   window.addEventListener('load', function() {
-    return new Chart("#one");
+    var memory, processes, usage,
+      _this = this;
+    usage = new Chart("#one");
+    memory = new Chart("#two");
+    processes = new Chart("#three");
+    return sock.on('ping', function(msg) {
+      console.log(msg);
+      usage.addPoint(msg.totalCpu);
+      memory.addPoint(msg.memoryUsage);
+      return processes.addPoint(msg.processCount);
+    });
   });
 
 }).call(this);

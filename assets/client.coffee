@@ -14,13 +14,8 @@ generateRandomData = ->
 
 class Chart
   constructor: (container) ->
-    sock.on 'ping', (msg) =>
-      @data.push msg.totalCpu
-      @data.shift()
-      console.log msg
-      @update()
 
-    @data = generateRandomData()
+    @data = []#generateRandomData()
 
     width = 400
     height = 60
@@ -36,8 +31,6 @@ class Chart
       .x( (d,i) -> i * 2 )
       .y( (d) -> yScale(d) )
 
-    @update()
-
     dots = @svg.selectAll("path")
       .data([@data])
       .enter()
@@ -50,11 +43,23 @@ class Chart
           fill: 'none'
         )
 
-  update: ->
+  addPoint: (val) ->
+    @data = @data[-200..]
+    @data.push val
+    @updateGraph()
+
+  updateGraph: ->
     @svg.selectAll("path")
       .data([@data])
       .attr d: @line
 
 window.addEventListener 'load', ->
-  new Chart("#one")
+  usage = new Chart("#one")
+  memory = new Chart("#two")
+  processes = new Chart("#three")
 
+  sock.on 'ping', (msg) =>
+    console.log msg
+    usage.addPoint msg.totalCpu
+    memory.addPoint msg.memoryUsage
+    processes.addPoint msg.processCount

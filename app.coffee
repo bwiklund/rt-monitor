@@ -24,11 +24,19 @@ updateStats = ->
   # but good enough for a demo. something like this:
   # http://linux.die.net/man/1/sar
   # would be better
-  exec "ps aux | awk '{print $3}'", (err, stdout, stderr) ->
-    usages = (stdout.split(/\n/)[1..])
+  exec "ps aux | awk '{print $3,$4}'", (err, stdout, stderr) ->
+    usages = (stdout.split(/\n/)[1..]).map (row) -> 
+      parts = row.split /\s/
+      cpu: parts[0], memory: parts[1]
+
     totalCpu = 0
-    totalCpu += ~~usage for usage in usages
-    ping = {totalCpu}
+    totalCpu += ~~usage.cpu for usage in usages
+
+    memoryUsage = 0
+    memoryUsage += ~~usage.memory for usage in usages
+
+    processCount = usages.length
+    ping = {totalCpu,memoryUsage,processCount}
     
     # save so we can fill the charts for new connections,
     # but only the last X pings
