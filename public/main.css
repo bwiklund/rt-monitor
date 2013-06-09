@@ -7,7 +7,8 @@ body {
 
 * {
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  line-height: 1; }
 
 h1 {
   font-size: 48px;
@@ -22,7 +23,7 @@ h2 {
   margin: 40px 0; }
   .chart .legend {
     display: inline-block;
-    width: 250px; }
+    width: 150px; }
   .chart svg {
     display: inline-block;
     border: 1px solid #d8d8d8;

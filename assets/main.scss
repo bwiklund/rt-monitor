@@ -9,6 +9,7 @@ body {
 * {
   margin: 0;
   padding: 0;
+  line-height: 1;
 }
 
 h1 {
@@ -28,7 +29,7 @@ h2 {
 
   .legend {
     display: inline-block;
-    width: 250px;
+    width: 150px;
   }
 
   svg {
