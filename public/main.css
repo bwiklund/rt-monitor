@@ -23,8 +23,10 @@ h2 {
   margin: 40px 0; }
   .chart .legend {
     display: inline-block;
+    vertical-align: top;
     width: 150px; }
   .chart svg {
     display: inline-block;
+    vertical-align: top;
     border: 1px solid #d8d8d8;
     border-top: none; }
