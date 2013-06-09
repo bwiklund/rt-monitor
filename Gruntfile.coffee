@@ -6,6 +6,11 @@ module.exports = (grunt) ->
         files: 
           'public/client.js': 'assets/client.coffee'
 
+    uglify:
+      my_target:
+        files: 
+          'public/client.js': 'public/client.js'
+
     jade:
       html:
         files:
@@ -19,11 +24,14 @@ module.exports = (grunt) ->
 
     watch:
       files: ['./assets/**/*']
-      tasks: ['sass','jade','coffee']
+      tasks: ['default']
       options:
-        nospawn: true 
+        nospawn: true
+
+  grunt.registerTask 'default', ['sass','jade','coffee']
 
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-jade')
   grunt.loadNpmTasks('grunt-sass')
   grunt.loadNpmTasks('grunt-contrib-watch')
+  grunt.loadNpmTasks('grunt-contrib-uglify')
