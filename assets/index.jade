@@ -1,12 +1,19 @@
-.chart#one
-  .legend
-    h2 Current Bandwidth
-    h1 310mbps
-.chart#two
-  .legend
-    h2 Total Users
-    h1 31,201
-.chart#three
-  .legend
-    h2 Median Latency
-    h1 45ms
+html
+  head
+    script(src="//cdnjs.cloudflare.com/ajax/libs/d3/3.1.6/d3.min.js")
+    script(src="client.js")
+    link(rel="stylesheet",href="main.css")
+    title D3 Realtime Monitor Demo
+  body
+    .chart#one
+      .legend
+        h2 Current Bandwidth
+        h1 310mbps
+    .chart#two
+      .legend
+        h2 Total Users
+        h1 31,201
+    .chart#three
+      .legend
+        h2 Median Latency
+        h1 45ms
