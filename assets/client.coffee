@@ -34,8 +34,8 @@ class Chart
     @updateGraph()
 
   addPoint: (val) ->
-    @data = @data[-200..]
     @data.push val
+    @data = @data[-200..]
     @updateGraph()
 
   updateGraph: ->
@@ -54,7 +54,7 @@ window.addEventListener 'load', ->
   memory =    new Chart("#two","%",100)
   processes = new Chart("#three","",300)
 
-  sock.on 'ping', (msg) =>
+  sock.on 'ping', (msg) ->
     usage.addPoint     msg.totalCpu
     memory.addPoint    msg.memoryUsage
     processes.addPoint msg.processCount

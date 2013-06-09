@@ -32,8 +32,8 @@
     }
 
     Chart.prototype.addPoint = function(val) {
-      this.data = this.data.slice(-200);
       this.data.push(val);
+      this.data = this.data.slice(-200);
       return this.updateGraph();
     };
 
@@ -51,8 +51,7 @@
   })();
 
   window.addEventListener('load', function() {
-    var memory, processes, sock, usage,
-      _this = this;
+    var memory, processes, sock, usage;
     sock = io.connect();
     usage = new Chart("#one", "%", 200);
     memory = new Chart("#two", "%", 100);
