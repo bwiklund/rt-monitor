@@ -12,8 +12,12 @@ app.use express.logger()
 httpServer = http.createServer(app) # attach express
 sio = io.listen httpServer # attach socket.io
 
+recentPings = []
+
+
 sio.on 'connection', (sock) ->
-  # todo: fill history in
+  sock.emit 'ping', ping for ping in recentPings
+
 
 updateStats = ->
   # this isn't as precise or clean as it could be,
@@ -25,6 +29,12 @@ updateStats = ->
     totalCpu = 0
     totalCpu += ~~usage for usage in usages
     ping = {totalCpu}
+    
+    # save so we can fill the charts for new connections,
+    # but only the last X pings
+    recentPings.push ping
+    recentPings = recentPings[-200..]
+
     sio.sockets.emit 'ping', ping
     setTimeout updateStats, 1000
 

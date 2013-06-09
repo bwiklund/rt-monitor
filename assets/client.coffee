@@ -56,8 +56,5 @@ class Chart
       .attr d: @line
 
 window.addEventListener 'load', ->
-
   new Chart("#one")
-  # addRandomChart("#two")
-  # addRandomChart("#three")
 
