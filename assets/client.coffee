@@ -4,7 +4,7 @@ class Chart
     @data = []#generateRandomData()
 
     width = 400
-    height = 64
+    height = 63
 
     yScale = d3.scale.linear()
       .domain([0,@yRange])

@@ -9,7 +9,7 @@
       this.yRange = yRange;
       this.data = [];
       width = 400;
-      height = 64;
+      height = 63;
       yScale = d3.scale.linear().domain([0, this.yRange]).range([height, 0]);
       this.root = d3.select(this.selector, this.units);
       this.svg = this.root.append("svg").attr({
