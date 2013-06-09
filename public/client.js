@@ -51,15 +51,17 @@
   })();
 
   window.addEventListener('load', function() {
-    var memory, processes, sock, usage;
+    var memory, processes, randomData, sock, usage;
     sock = io.connect();
     usage = new Chart("#one", "%", 200);
     memory = new Chart("#two", "%", 100);
     processes = new Chart("#three", "", 300);
+    randomData = new Chart("#four", "", 300);
     return sock.on('ping', function(msg) {
       usage.addPoint(msg.totalCpu);
       memory.addPoint(msg.memoryUsage);
-      return processes.addPoint(msg.processCount);
+      processes.addPoint(msg.processCount);
+      return randomData.addPoint(msg.randomData);
     });
   });
 

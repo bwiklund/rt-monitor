@@ -27,8 +27,10 @@ class HardwareMonitor
       for usage in usages
         totalCpu += parseFloat(usage.cpu) 
         memoryUsage += parseFloat(usage.memory)
+
+      randomData = Math.random() * Math.sin( new Date().getTime()/10000 ) * 100 + 100
       
-      @addLatestPing {totalCpu,memoryUsage,processCount}
+      @addLatestPing {totalCpu,memoryUsage,processCount,randomData}
 
       setTimeout @updateStats.bind(@), CONFIG.updateInterval
 
