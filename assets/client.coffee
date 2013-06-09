@@ -1,5 +1,5 @@
 class Chart
-  constructor: (@selector,@units = "") ->
+  constructor: (@selector,@units = "",@yRange) ->
 
     @data = []#generateRandomData()
 
@@ -7,7 +7,7 @@ class Chart
     height = 60
 
     yScale = d3.scale.linear()
-      .domain([0,200])
+      .domain([0,@yRange])
       .range([height,0])
 
     @root = d3.select(@selector,@units)
@@ -50,12 +50,11 @@ class Chart
 window.addEventListener 'load', ->
   sock = io.connect()
   
-  usage =     new Chart("#one","%")
-  memory =    new Chart("#two","%")
-  processes = new Chart("#three")
+  usage =     new Chart("#one","%",200)
+  memory =    new Chart("#two","%",100)
+  processes = new Chart("#three","",300)
 
   sock.on 'ping', (msg) =>
-    console.log msg
     usage.addPoint     msg.totalCpu
     memory.addPoint    msg.memoryUsage
     processes.addPoint msg.processCount
