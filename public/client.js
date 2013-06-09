@@ -30,7 +30,7 @@
 
   Chart = (function() {
     function Chart(container) {
-      var dots, height, width,
+      var dots, height, width, yScale,
         _this = this;
       sock.on('ping', function(msg) {
         _this.data.push(msg.totalCpu);
@@ -41,6 +41,7 @@
       this.data = generateRandomData();
       width = 400;
       height = 60;
+      yScale = d3.scale.linear().domain([0, 200]).range([height, 0]);
       this.svg = d3.select(container).append("svg").attr({
         width: width,
         height: height
@@ -48,7 +49,7 @@
       this.line = d3.svg.line().x(function(d, i) {
         return i * 2;
       }).y(function(d) {
-        return d;
+        return yScale(d);
       });
       this.update();
       dots = this.svg.selectAll("path").data([this.data]).enter().append("path").attr({

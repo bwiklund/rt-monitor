@@ -25,12 +25,16 @@ class Chart
     width = 400
     height = 60
 
+    yScale = d3.scale.linear()
+      .domain([0,200])
+      .range([height,0])
+
     @svg = d3.select(container).append("svg")
       .attr {width,height}
 
     @line = d3.svg.line()
       .x( (d,i) -> i * 2 )
-      .y( (d) -> d )
+      .y( (d) -> yScale(d) )
 
     @update()
 
