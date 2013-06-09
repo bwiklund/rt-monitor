@@ -1,19 +1,5 @@
-sock = io.connect()
-
-
-generateRandomData = ->
-  data = [0..200].map Math.random
-
-  # smoothing
-  for j in [0..3]
-    for d,i in data[0...-1]
-      data[i] = (data[i+1] + data[i])/2
-
-  data = (Math.pow(d,1/6) for d in data)
-
-
 class Chart
-  constructor: (container) ->
+  constructor: (@selector,@units = "") ->
 
     @data = []#generateRandomData()
 
@@ -24,7 +10,9 @@ class Chart
       .domain([0,200])
       .range([height,0])
 
-    @svg = d3.select(container).append("svg")
+    @root = d3.select(@selector,@units)
+
+    @svg = @root.append("svg")
       .attr {width,height}
 
     @line = d3.svg.line()
@@ -43,23 +31,31 @@ class Chart
           fill: 'none'
         )
 
+    @updateGraph()
+
   addPoint: (val) ->
     @data = @data[-200..]
     @data.push val
     @updateGraph()
 
   updateGraph: ->
+    val = @data[-1..][0] || 0
+    @root.select("h1").text( val.toFixed(0) + @units)
     @svg.selectAll("path")
       .data([@data])
       .attr d: @line
 
+
+
 window.addEventListener 'load', ->
-  usage = new Chart("#one")
-  memory = new Chart("#two")
+  sock = io.connect()
+  
+  usage =     new Chart("#one","%")
+  memory =    new Chart("#two","%")
   processes = new Chart("#three")
 
   sock.on 'ping', (msg) =>
     console.log msg
-    usage.addPoint msg.totalCpu
-    memory.addPoint msg.memoryUsage
+    usage.addPoint     msg.totalCpu
+    memory.addPoint    msg.memoryUsage
     processes.addPoint msg.processCount

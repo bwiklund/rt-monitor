@@ -14,10 +14,8 @@ sio = io.listen httpServer # attach socket.io
 
 recentPings = []
 
-
 sio.on 'connection', (sock) ->
   sock.emit 'ping', ping for ping in recentPings
-
 
 updateStats = ->
   # this isn't as precise or clean as it could be,
@@ -25,17 +23,18 @@ updateStats = ->
   # http://linux.die.net/man/1/sar
   # would be better
   exec "ps aux | awk '{print $3,$4}'", (err, stdout, stderr) ->
-    usages = (stdout.split(/\n/)[1..]).map (row) -> 
+    usages = (stdout.split(/\n/)[1...-1]).map (row) -> 
       parts = row.split /\s/
       cpu: parts[0], memory: parts[1]
 
-    totalCpu = 0
-    totalCpu += ~~usage.cpu for usage in usages
-
-    memoryUsage = 0
-    memoryUsage += ~~usage.memory for usage in usages
-
+    totalCpu = memoryUsage = 0
     processCount = usages.length
+
+    # tally up cpu and mem
+    for usage in usages
+      totalCpu += parseFloat(usage.cpu) 
+      memoryUsage += parseFloat(usage.memory)
+
     ping = {totalCpu,memoryUsage,processCount}
     
     # save so we can fill the charts for new connections,
@@ -44,7 +43,7 @@ updateStats = ->
     recentPings = recentPings[-200..]
 
     sio.sockets.emit 'ping', ping
-    setTimeout updateStats, 1000
+    setTimeout updateStats, CONFIG.updateInterval
 
 updateStats()
 
