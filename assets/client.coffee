@@ -1,5 +1,8 @@
 window.addEventListener 'load', ->
 
+  sock = io.connect()
+  sock.on 'ping', (msg) ->
+    console.log msg
 
   generateRandomData = ->
     data = [0..200].map Math.random

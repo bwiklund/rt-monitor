@@ -1,6 +1,10 @@
 (function() {
   window.addEventListener('load', function() {
-    var addRandomChart, generateRandomData;
+    var addRandomChart, generateRandomData, sock;
+    sock = io.connect();
+    sock.on('ping', function(msg) {
+      return console.log(msg);
+    });
     generateRandomData = function() {
       var d, data, i, j, _i, _j, _k, _len, _ref, _results;
       data = (function() {
