@@ -50,10 +50,10 @@ class Chart
 window.addEventListener 'load', ->
   sock = io.connect()
   
-  usage =      new Chart("#one","%",200)
-  memory =     new Chart("#two","%",100)
-  processes =  new Chart("#three","",300)
-  randomData = new Chart("#four","",300)
+  usage =      new Chart("#usage","%",200)
+  memory =     new Chart("#memory","%",100)
+  processes =  new Chart("#processes","",300)
+  randomData = new Chart("#random","",300)
 
   sock.on 'ping', (msg) ->
     usage.addPoint      msg.totalCpu
