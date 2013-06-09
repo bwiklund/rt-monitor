@@ -1,47 +1,59 @@
-window.addEventListener 'load', ->
-
-  sock = io.connect()
-  sock.on 'ping', (msg) ->
-    console.log msg
-
-  generateRandomData = ->
-    data = [0..200].map Math.random
-
-    # smoothing
-    for j in [0..3]
-      for d,i in data[0...-1]
-        data[i] = (data[i+1] + data[i])/2
-
-    data = (Math.pow(d,1/6) for d in data)
+sock = io.connect()
 
 
-  addRandomChart = (container) ->
-    data = generateRandomData()
+generateRandomData = ->
+  data = [0..200].map Math.random
+
+  # smoothing
+  for j in [0..3]
+    for d,i in data[0...-1]
+      data[i] = (data[i+1] + data[i])/2
+
+  data = (Math.pow(d,1/6) for d in data)
+
+
+class Chart
+  constructor: (container) ->
+    sock.on 'ping', (msg) =>
+      @data.push msg.totalCpu
+      @data.shift()
+      console.log msg
+      @update()
+
+    @data = generateRandomData()
 
     width = 400
     height = 60
 
-    svg = d3.select(container).append("svg")
+    @svg = d3.select(container).append("svg")
       .attr {width,height}
 
-    line = d3.svg.line()
+    @line = d3.svg.line()
       .x( (d,i) -> i * 2 )
-      .y( (d) -> 100 - d * 100 )
+      .y( (d) -> d )
 
-    dots = svg.selectAll("path")
-      .data([data])
+    @update()
+
+    dots = @svg.selectAll("path")
+      .data([@data])
       .enter()
         .append("path")
         .attr(
-          d: line
+          d: @line
           stroke: 'black'
           'stroke-width': 3
           'stroke-linejoin': 'round'
           fill: 'none'
         )
 
+  update: ->
+    @svg.selectAll("path")
+      .data([@data])
+      .attr d: @line
 
-  addRandomChart("#one")
-  addRandomChart("#two")
-  addRandomChart("#three")
+window.addEventListener 'load', ->
+
+  new Chart("#one")
+  # addRandomChart("#two")
+  # addRandomChart("#three")
 

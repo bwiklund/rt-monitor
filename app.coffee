@@ -17,7 +17,9 @@ sio.on 'connection', (sock) ->
 
 updateStats = ->
   # this isn't as precise or clean as it could be,
-  # but good enough for a demo.
+  # but good enough for a demo. something like this:
+  # http://linux.die.net/man/1/sar
+  # would be better
   exec "ps aux | awk '{print $3}'", (err, stdout, stderr) ->
     usages = (stdout.split(/\n/)[1..])
     totalCpu = 0
