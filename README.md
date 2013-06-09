@@ -5,7 +5,7 @@ Realtime Server monitor
 Install:
 
 ```
-npm install [--production]
+npm install
 ```
 
 Run with:
